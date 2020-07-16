@@ -3,9 +3,9 @@ import os
 from glob import glob
 import json
 # Path to your images
-image_paths = glob("trainingset/*")
+image_paths = glob("witcher/witcher_market/annotated/*.jpg")
 #Path to your annotations from VIA tool
-annotation_file = 'kylo_luke.json'
+annotation_file = 'annotations.json'
 #clean up the annotations a little
 annotations = json.load(open(annotation_file))
 cleaned_annotations = {}
@@ -17,14 +17,14 @@ valid_annotations = {}
 # 20% of images in validation folder
 for img in image_paths:
     # Image goes to Validation folder
-    if random()<0.2:
+    if random()<0.1:
         os.system("cp "+ img + " procdata/val/")
         img = img.split("/")[-1]
         valid_annotations[img] = cleaned_annotations[img]
-    else:
-        os.system("cp "+ img + " procdata/train/")
-        img = img.split("/")[-1]
-        train_annotations[img] = cleaned_annotations[img]
+    
+    os.system("cp "+ img + " procdata/train/")
+    img = img.split("/")[-1]
+    train_annotations[img] = cleaned_annotations[img]
 # put different annotations in different folders
 with open('procdata/val/via_region_data.json', 'w') as fp:
     json.dump(valid_annotations, fp)
